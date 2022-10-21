@@ -39,7 +39,8 @@ class ReorderableItemView extends StatefulWidget {
   ReorderableItemViewState createState() => ReorderableItemViewState();
 }
 
-class ReorderableItemViewState extends State<ReorderableItemView> with TickerProviderStateMixin {
+class ReorderableItemViewState extends State<ReorderableItemView>
+    with TickerProviderStateMixin {
   late ReorderableGridStateMixin _listState;
   bool _dragging = false;
 
@@ -72,7 +73,8 @@ class ReorderableItemViewState extends State<ReorderableItemView> with TickerPro
     final renderBox = context.findRenderObject() as RenderBox;
     return renderBox.localToGlobal(parentOffset);
   }
-  RenderBox  get parentRenderBox {
+
+  RenderBox get parentRenderBox {
     return _listState.context.findRenderObject() as RenderBox;
   }
 
@@ -133,8 +135,10 @@ class ReorderableItemViewState extends State<ReorderableItemView> with TickerPro
     if (_selfPos != _targetPos) {
       // any better idea?
       setState(() {
-        debug("_buildPlaceHolder for index $index, _offset: $_placeholderOffset, _targetPos: $_targetPos");
-        _placeholderOffset = _listState.getPosByIndex(_targetPos) - _listState.getPosByIndex(_selfPos);
+        debug(
+            "_buildPlaceHolder for index $index, _offset: $_placeholderOffset, _targetPos: $_targetPos");
+        _placeholderOffset = _listState.getPosByIndex(_targetPos) -
+            _listState.getPosByIndex(_selfPos);
       });
     }
   }
@@ -156,11 +160,15 @@ class ReorderableItemViewState extends State<ReorderableItemView> with TickerPro
   MultiDragGestureRecognizer _createDragRecognizer() {
     final dragStartDelay = _listState.dragStartDelay;
     if (dragStartDelay.inMilliseconds == 0) {
-      return ImmediateMultiDragGestureRecognizer(debugOwner: this);
+      return ImmediateMultiDragGestureRecognizer(
+        debugOwner: this,
+        supportedDevices: PointerDeviceKind.values.toSet(),
+      );
     }
     return DelayedMultiDragGestureRecognizer(
       debugOwner: this,
       delay: dragStartDelay,
+      supportedDevices: PointerDeviceKind.values.toSet(),
     );
   }
 
@@ -205,7 +213,8 @@ class ReorderableItemViewState extends State<ReorderableItemView> with TickerPro
     }
 
     return Transform(
-      transform: Matrix4.translationValues(_placeholderOffset.dx, _placeholderOffset.dy, 0),
+      transform: Matrix4.translationValues(
+          _placeholderOffset.dx, _placeholderOffset.dy, 0),
       child: _listState.placeholderBuilder!(index, _listState.dropIndex, child),
     );
   }
